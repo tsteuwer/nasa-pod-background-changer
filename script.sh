@@ -4,8 +4,8 @@ TINY_DATE=`date +%y%m`
 REMOTE_URL="https://apod.nasa.gov/apod/ap$LRG_DATE.html"
 TMP_FILE_PREFIX="nasapotdapp"
 FILE_NAME="$TMP_FILE_PREFIX.html"
-FILE_PATH="/home/troy/Desktop/$FILE_NAME"
-JPG_FILE_PATH="/home/troy/Desktop/$TMP_FILE_PREFIX.jpg"
+FILE_PATH="/tmp/$FILE_NAME"
+JPG_FILE_PATH_TMP="/tmp/$TMP_FILE_PREFIX.jpg"
 
 # Find out whether we need weget or curl
 if [[ ! -n $( command -v wget ) ]]
@@ -25,9 +25,11 @@ echo $NEW_FILE_NAME
 
 if [[ ! -n $( command -v wget ) ]]
 then
-	curl -O $JPG_FILE_PATH "https://apod.nasa.gov/apod/$NEW_FILE_NAME"
+	curl -O $JPG_FILE_PATH_TMP "https://apod.nasa.gov/apod/$NEW_FILE_NAME"
 else
-	wget -O $JPG_FILE_PATH "https://apod.nasa.gov/apod/$NEW_FILE_NAME"
+	wget -O $JPG_FILE_PATH_TMP "https://apod.nasa.gov/apod/$NEW_FILE_NAME"
 fi
 
-gsettings set org.gnome.desktop.background picture-uri "file:///$JPG_FILE_PATH"
+gsettings set org.gnome.desktop.background picture-uri "file:///$JPG_FILE_PATH_TMP"
+
+rm $FILE_PATH
